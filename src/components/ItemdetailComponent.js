@@ -17,7 +17,9 @@ class ItemDetail extends Component {
 
         } else {
             return (
-                <div/>
+                <div>
+                    No hay item seleccionado
+                </div>
             );
         }
 
