@@ -1,5 +1,5 @@
 import * as ActionTypes from './ActionTypes';
-import {ITEMS} from "../shared/items";
+import {baseUrl} from "../shared/baseUrl";
 
 // action creator
 export const addComment = (itemId, rating, author, comment) => (
@@ -19,13 +19,12 @@ export const addComment = (itemId, rating, author, comment) => (
 // el thunk puede despachar varias acciones
 export const fetchItems = () => (dispatch) => {
     dispatch(itemsLoading(true));
-
-    setTimeout(() => {
         //poner items en el store
-        dispatch(addItems(ITEMS));
-    }, 2000);
-};
+    return fetch(baseUrl + 'items')
+        .then(response => response.json())
+        .then(items => dispatch(addItems(items)));
 
+};
 
 // action creator
 export const itemsLoading = () => ({
@@ -42,4 +41,20 @@ export const itemsFailed = (errmess) => ({
 export const addItems = (items) => ({
     type: ActionTypes.ADD_ITEMS,
     payload: items
+});
+
+export const fetchComments = () => (dispatch) => {
+    return fetch(baseUrl + 'comments')
+        .then(response => response.json())
+        .then(comments => dispatch(addComments(comments)));
+};
+
+export const commentsFailed = (errmess) => ({
+    type: ActionTypes.COMMENTS_FAILED,
+    payload: errmess
+});
+
+export const addComments = (comments) => ({
+    type: ActionTypes.ADD_COMMENTS,
+    payload: comments
 });
