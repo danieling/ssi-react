@@ -19,11 +19,24 @@ export const addComment = (itemId, rating, author, comment) => (
 // el thunk puede despachar varias acciones
 export const fetchItems = () => (dispatch) => {
     dispatch(itemsLoading(true));
-        //poner items en el store
+    //poner items en el store
     return fetch(baseUrl + 'items')
+        .then(response => {
+                if (response.ok) {
+                    return response;
+                } else {
+                    let error = new Error('Error ' + response.status + ': ' + response.statusText);
+                    error.response = response;
+                    throw error;
+                }
+            },
+            error => {
+                var errmess = new Error(error.message);
+                throw errmess;
+            })
         .then(response => response.json())
-        .then(items => dispatch(addItems(items)));
-
+        .then(items => dispatch(addItems(items)))
+        .catch(error => dispatch(itemsFailed(error.message)));
 };
 
 // action creator
@@ -45,8 +58,22 @@ export const addItems = (items) => ({
 
 export const fetchComments = () => (dispatch) => {
     return fetch(baseUrl + 'comments')
+        .then(response => {
+                if (response.ok) {
+                    return response;
+                } else {
+                    var error = new Error('Error ' + response.status + ': ' + response.statusText);
+                    error.response = response;
+                    throw error;
+                }
+            },
+            error => {
+                var errmess = new Error(error.message);
+                throw errmess;
+            })
         .then(response => response.json())
-        .then(comments => dispatch(addComments(comments)));
+        .then(comments => dispatch(addComments(comments)))
+        .catch(error => dispatch(commentsFailed(error.message)));
 };
 
 export const commentsFailed = (errmess) => ({
