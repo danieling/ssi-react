@@ -2,15 +2,10 @@ import * as ActionTypes from './ActionTypes';
 import {baseUrl} from "../shared/baseUrl";
 
 // action creator
-export const addComment = (itemId, rating, author, comment) => (
+export const addComment = (comment) => (
     {
         type: ActionTypes.ADD_COMMENT,
-        payload: {
-            itemId: itemId,
-            rating: rating,
-            author: author,
-            comment: comment
-        }
+        payload: comment
     }
 );
 

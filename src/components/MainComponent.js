@@ -8,7 +8,7 @@ import Contact from "./ContactComponent";
 import ItemDetail from "./ItemdetailComponent";
 import About from "./AboutComponent";
 import {connect} from "react-redux";
-import {addComment, fetchComments, fetchItems} from "../redux/ActionCreators";
+import {addComment, fetchComments, fetchItems, postComment} from "../redux/ActionCreators";
 import {actions} from "react-redux-form";
 
 // de redux al componente
@@ -27,7 +27,8 @@ const mapDispatchToProps = dispatch => ({
     resetFeedbackForm: () => {
         dispatch(actions.reset('feedback'))
     },
-    fetchComments: () => dispatch(fetchComments())
+    fetchComments: () => dispatch(fetchComments()),
+    postComment: (itemId, rating, author, comment) => dispatch(postComment(itemId, rating, author, comment))
 });
 
 class Main extends Component {
@@ -51,7 +52,7 @@ class Main extends Component {
                     itemsErrMess={this.props.items.errMess}
                     comments={this.props.comments.comments.filter((comment) => comment.itemId === parseInt(match.params.itemId, 10))}
                     commentsErrMess={this.props.comments.errMess}
-                    addComment={this.props.addComment}
+                    postComment={this.props.postComment}
                 />
             );
         };
